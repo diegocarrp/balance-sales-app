@@ -20,9 +20,9 @@ create table item_type(
     primary key (id)
 )
 
-insert into category values (1, 'Food');
-insert into category values (2, 'Furniture');
-insert into category values (3, 'Delivery');
+insert into category (name) values ('Food');
+insert into category (name) values ('Furniture');
+insert into category (name) values ('Delivery');
 
-insert into item_type values (1, 'Product');
-insert into item_type values (2, 'Service');
+insert into item_type (name) values ('Product');
+insert into item_type (name) values ('Service');

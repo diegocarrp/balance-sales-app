@@ -1,6 +1,6 @@
 package cl.diego.balance.sales.app.sale.controller;
 
-import cl.diego.balance.sales.app.sale.domain.SaleDto;
+import cl.diego.balance.sales.app.sale.dto.SaleDto;
 import cl.diego.balance.sales.app.sale.service.SaleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class SaleController {
     public ResponseEntity<Void> registerSale( @RequestBody SaleDto sale ) {
         log.info( "Registering sale with body: <{}>", sale );
 
-        saleService.RegisterSale( sale );
+        saleService.registerSale( sale );
         return ResponseEntity.ok( ).build( );
     }
 

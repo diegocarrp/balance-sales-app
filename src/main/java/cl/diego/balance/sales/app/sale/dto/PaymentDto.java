@@ -1,4 +1,4 @@
-package cl.diego.balance.sales.app.sale.domain;
+package cl.diego.balance.sales.app.sale.dto;
 
 import lombok.Data;
 

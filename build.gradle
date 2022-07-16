@@ -12,8 +12,9 @@ plugins {
 }
 
 flyway {
-    url = 'jdbc:h2:file:./target/foobar'
-    user = 'sa'
+    url = 'jdbc:postgresql://localhost:5433/balance_sales_db'
+    user = 'postgres'
+    password = 'diego123'
 }
 
 group = 'cl.diego'

@@ -5,10 +5,7 @@ import cl.diego.balance.sales.app.sale.service.SaleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping( "/sale" )
@@ -24,6 +21,14 @@ public class SaleController {
 
         saleService.registerSale( sale );
         return ResponseEntity.ok( ).build( );
+    }
+
+    @GetMapping( "/id/{id}" )
+    public ResponseEntity<SaleDto> registerSale( @PathVariable Long id ) {
+        log.info( "Looking for sale with id: <{}>", id );
+
+        SaleDto saleFound = saleService.getSaleById( id );
+        return ResponseEntity.ok( saleFound );
     }
 
 

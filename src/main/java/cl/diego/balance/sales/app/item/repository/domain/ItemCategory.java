@@ -1,5 +1,6 @@
 package cl.diego.balance.sales.app.item.repository.domain;
 
+import cl.diego.balance.sales.app.item.dto.CategoryDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,4 +20,15 @@ public class ItemCategory {
     private Long   id;
     private String description;
 
+    public ItemCategory( CategoryDto category ) {
+        this.description = category.getDescription();
+    }
+
+    public CategoryDto toItemType( ) {
+        return CategoryDto.builder( )
+                .id( this.id )
+                .description( this.description )
+                .build( );
+
+    }
 }

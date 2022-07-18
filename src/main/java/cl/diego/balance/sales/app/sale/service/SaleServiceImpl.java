@@ -1,6 +1,8 @@
 package cl.diego.balance.sales.app.sale.service;
 
 import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
+import cl.diego.balance.sales.app.sale.client.CustomerClient;
+import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailItemDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
@@ -24,26 +26,24 @@ public class SaleServiceImpl implements SaleService {
     private final PaymentMethodService paymentMethodService;
     private final ItemCategoryService  itemCategoryService;
     private final SaleItemService      saleItemService;
+    private final CustomerClient       customerClient;
 
     public SaleServiceImpl( SaleRepository saleRepository,
                             PaymentMethodService paymentMethodService,
                             ItemCategoryService itemCategoryService,
-                            SaleItemService saleItemService ) {
+                            SaleItemService saleItemService,
+                            CustomerClient customerClient ) {
         this.saleRepository       = saleRepository;
         this.paymentMethodService = paymentMethodService;
         this.itemCategoryService  = itemCategoryService;
         this.saleItemService      = saleItemService;
+        this.customerClient       = customerClient;
     }
 
     @Override
     public void registerSale( SaleDto sale ) {
 
-        Sale saleDb = Sale.builder( )
-                .customerId( sale.getCustomerId( ) )
-                .cashierId( sale.getCashierId( ) )
-                .datetime( sale.getDatetime( ) )
-                .totalAmount( sale.getTotalAmount( ) )
-                .build( );
+        Sale saleDb = buildSale( sale );
 
         List<Payment> payments = buildPayments( sale, saleDb );
         saleDb.setPayments( payments );
@@ -52,6 +52,19 @@ public class SaleServiceImpl implements SaleService {
         saleDb.setItems( items );
 
         saleRepository.save( saleDb );
+    }
+
+    private Sale buildSale( SaleDto sale ) {
+
+        CustomerDto customer = customerClient.findById( sale.getCustomerId( ) );
+        CustomerDto cashier = customerClient.findById( sale.getCashierId( ) );
+
+        return Sale.builder( )
+                .customerId( sale.getCustomerId( ) )
+                .cashierId( sale.getCashierId( ) )
+                .datetime( sale.getDatetime( ) )
+                .totalAmount( sale.getTotalAmount( ) )
+                .build( );
     }
 
     private List<SaleItem> buildSaleItems( SaleDto sale,

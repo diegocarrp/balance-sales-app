@@ -7,6 +7,7 @@ import cl.diego.balance.sales.app.item.service.ItemService;
 import cl.diego.balance.sales.app.sale.repository.SaleItemRepository;
 import cl.diego.balance.sales.app.sale.repository.domain.SaleItem;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class SaleItemServiceImpl implements SaleItemService {
 
     private final SaleItemRepository saleItemRepository;

@@ -1,14 +1,9 @@
 package cl.diego.balance.sales.app.sale.service;
 
-import cl.diego.balance.sales.app.item.repository.ItemCategoryRepository;
-import cl.diego.balance.sales.app.item.repository.ItemRepository;
-import cl.diego.balance.sales.app.item.repository.domain.Item;
 import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailItemDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
-import cl.diego.balance.sales.app.sale.repository.PaymentMethodRepository;
-import cl.diego.balance.sales.app.sale.repository.SaleItemRepository;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
 import cl.diego.balance.sales.app.sale.repository.domain.Payment;
 import cl.diego.balance.sales.app.sale.repository.domain.PaymentMethod;
@@ -25,22 +20,19 @@ import java.util.stream.Collectors;
 @Service
 public class SaleServiceImpl implements SaleService {
 
-    private final SaleRepository          saleRepository;
-    private final PaymentMethodRepository paymentMethodRepository;
-    private final ItemCategoryRepository  itemCategoryRepository;
-    private final SaleItemRepository      saleItemRepository;
-    private final ItemRepository          itemRepository;
+    private final SaleRepository       saleRepository;
+    private final PaymentMethodService paymentMethodService;
+    private final ItemCategoryService  itemCategoryService;
+    private final SaleItemService      saleItemService;
 
     public SaleServiceImpl( SaleRepository saleRepository,
-                            PaymentMethodRepository paymentMethodRepository,
-                            ItemCategoryRepository itemCategoryRepository,
-                            SaleItemRepository saleItemRepository,
-                            ItemRepository itemRepository ) {
-        this.saleRepository          = saleRepository;
-        this.paymentMethodRepository = paymentMethodRepository;
-        this.itemCategoryRepository  = itemCategoryRepository;
-        this.saleItemRepository      = saleItemRepository;
-        this.itemRepository          = itemRepository;
+                            PaymentMethodService paymentMethodService,
+                            ItemCategoryService itemCategoryService,
+                            SaleItemService saleItemService ) {
+        this.saleRepository       = saleRepository;
+        this.paymentMethodService = paymentMethodService;
+        this.itemCategoryService  = itemCategoryService;
+        this.saleItemService      = saleItemService;
     }
 
     @Override
@@ -53,19 +45,18 @@ public class SaleServiceImpl implements SaleService {
                 .totalAmount( sale.getTotalAmount( ) )
                 .build( );
 
-        List<Payment> payments = sale.getPayments( ).stream( )
-                .map( p -> {
-                    PaymentMethod paymentMethod = paymentMethodRepository.findById( p.getPaymentMethodId( ) )
-                            .orElseThrow( );
-                    return Payment.builder( )
-                            .amount( p.getAmount( ) )
-                            .paymentMethod( paymentMethod )
-                            .sale( saleDb )
-                            .build( );
-                } ).collect( Collectors.toList( ) );
+        List<Payment> payments = buildPayments( sale, saleDb );
         saleDb.setPayments( payments );
 
-        List<SaleItem> items = sale.getItems( ).stream( )
+        List<SaleItem> items = buildSaleItems( sale, saleDb );
+        saleDb.setItems( items );
+
+        saleRepository.save( saleDb );
+    }
+
+    private List<SaleItem> buildSaleItems( SaleDto sale,
+                                           Sale saleDb ) {
+        return sale.getItems( ).stream( )
                 .map( saleItemDto -> SaleItem.builder( )
                         .sku( saleItemDto.getSku( ) )
                         .total( saleItemDto.getTotal( ) )
@@ -73,9 +64,19 @@ public class SaleServiceImpl implements SaleService {
                         .sale( saleDb )
                         .build( ) )
                 .collect( Collectors.toList( ) );
+    }
 
-        saleDb.setItems( items );
-        saleRepository.save( saleDb );
+    private List<Payment> buildPayments( SaleDto sale,
+                                         Sale saleDb ) {
+        return sale.getPayments( ).stream( )
+                .map( p -> {
+                    PaymentMethod paymentMethod = paymentMethodService.findById( p.getPaymentMethodId( ) );
+                    return Payment.builder( )
+                            .amount( p.getAmount( ) )
+                            .paymentMethod( paymentMethod )
+                            .sale( saleDb )
+                            .build( );
+                } ).collect( Collectors.toList( ) );
     }
 
     @Override
@@ -87,18 +88,10 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public SaleDetailDto getSaleDetailByCategory( ) {
-        List<SaleItem> saleItems = saleItemRepository.findAll( );
-
-        List<ItemCategory> categories = itemCategoryRepository.findAll( );
+        List<ItemCategory> categories = itemCategoryService.findAll( );
 
         List<SaleDetailItemDto> detailItems = categories.stream( ).map( cat -> {
-            BigDecimal categoryTotal = saleItems.stream( ).filter( saleItem -> {
-                        Item itemFound = itemRepository.findBySku( saleItem.getSku( ) )
-                                .orElseThrow( );
-                        return itemFound.getItemCategoryId( ).equals( cat );
-                    } ).map( SaleItem::getTotal )
-                    .reduce( BigDecimal.ZERO, BigDecimal::add );
-
+            BigDecimal categoryTotal = saleItemService.totalSaleByCategory( cat );
             return SaleDetailItemDto.builder( )
                     .category( cat.getDescription( ) )
                     .salesAmount( categoryTotal )

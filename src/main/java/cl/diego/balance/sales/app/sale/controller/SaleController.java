@@ -1,5 +1,6 @@
 package cl.diego.balance.sales.app.sale.controller;
 
+import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
 import cl.diego.balance.sales.app.sale.service.SaleService;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class SaleController {
         return ResponseEntity.ok( ).build( );
     }
 
-    @GetMapping( "/id/{id}" )
+    @GetMapping( "/by-id/{id}" )
     public ResponseEntity<SaleDto> registerSale( @PathVariable Long id ) {
         log.info( "Looking for sale with id: <{}>", id );
 
@@ -31,5 +32,11 @@ public class SaleController {
         return ResponseEntity.ok( saleFound );
     }
 
+    @GetMapping( "/by-category" )
+    public ResponseEntity<SaleDetailDto> getSaleDetailByCategory( ) {
+        log.info( "Looking for sale detail by categories" );
+        SaleDetailDto saleDetailByCategory = saleService.getSaleDetailByCategory( );
+        return ResponseEntity.ok( saleDetailByCategory );
+    }
 
 }

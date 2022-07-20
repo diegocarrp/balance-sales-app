@@ -1,5 +1,6 @@
 package cl.diego.balance.sales.app.sale.service;
 
+import cl.diego.balance.sales.app.sale.exception.PaymentMethodNotFoundException;
 import cl.diego.balance.sales.app.sale.repository.PaymentMethodRepository;
 import cl.diego.balance.sales.app.sale.repository.domain.PaymentMethod;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,6 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     @Override
     public PaymentMethod findById( Long id ) {
         return paymentMethodRepository.findById( id )
-                .orElseThrow();
+                .orElseThrow( PaymentMethodNotFoundException::new );
     }
 }

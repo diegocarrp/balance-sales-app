@@ -1,7 +1,6 @@
 package cl.diego.balance.sales.app.sale.service;
 
 import cl.diego.balance.sales.app.item.dto.ItemDto;
-import cl.diego.balance.sales.app.item.repository.domain.Item;
 import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
 import cl.diego.balance.sales.app.item.service.ItemService;
 import cl.diego.balance.sales.app.sale.repository.SaleItemRepository;

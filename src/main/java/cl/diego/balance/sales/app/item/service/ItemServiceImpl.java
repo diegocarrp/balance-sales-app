@@ -1,7 +1,8 @@
 package cl.diego.balance.sales.app.item.service;
 
+import cl.diego.balance.commons.rest.exception.ApiValidationException;
 import cl.diego.balance.sales.app.item.dto.ItemDto;
-import cl.diego.balance.sales.app.item.repository.ItemCategoryRepository;
+import cl.diego.balance.sales.app.item.exception.ItemNotFoundException;
 import cl.diego.balance.sales.app.item.repository.ItemRepository;
 import cl.diego.balance.sales.app.item.repository.ItemTypeRepository;
 import cl.diego.balance.sales.app.item.repository.domain.Item;
@@ -22,18 +23,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ItemServiceImpl implements ItemService {
 
-    private final ItemRepository         itemRepository;
-    private final ItemCategoryRepository itemCategoryRepository;
-    private final ItemTypeRepository     itemTypeRepository;
-    private final Validator              validator;
+    private final ItemRepository      itemRepository;
+    private final ItemCategoryService itemCategoryService;
+    private final ItemTypeService     itemTypeService;
+    private final Validator           validator;
 
     public ItemServiceImpl( ItemRepository itemRepository,
-                            ItemCategoryRepository itemCategoryRepository,
-                            ItemTypeRepository itemTypeRepository ) {
-        this.itemRepository         = itemRepository;
-        this.itemCategoryRepository = itemCategoryRepository;
-        this.itemTypeRepository     = itemTypeRepository;
-        this.validator              = Validation.byDefaultProvider( )
+                            ItemCategoryService itemCategoryService,
+                            ItemTypeService itemTypeService ) {
+        this.itemRepository      = itemRepository;
+        this.itemCategoryService = itemCategoryService;
+        this.itemTypeService     = itemTypeService;
+        this.validator           = Validation.byDefaultProvider( )
                 .configure( )
                 .messageInterpolator( new ParameterMessageInterpolator( ) )
                 .buildValidatorFactory( )
@@ -43,17 +44,15 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void saveItem( ItemDto item ) {// throws BadInputException {
         validateItem( item );
-        ItemCategory category = itemCategoryRepository.findById( item.getCategoryId( ) )
-                .orElseThrow( );
-        ItemType type = itemTypeRepository.findById( item.getItemType( ) )
-                .orElseThrow( );
+        ItemCategory category = itemCategoryService.findById( item.getCategoryId( ) );
+        ItemType type = itemTypeService.findById( item.getItemType( ) );
         itemRepository.save( new Item( item, category, type ) );
     }
 
     @Override
     public ItemDto getItemBySku( String sku ) {// throws ItemNotFoundException {
         Item itemDb = itemRepository.findBySku( sku )
-                .orElseThrow( );
+                .orElseThrow( ItemNotFoundException::new );
         log.info( "itemFound: <{}>", itemDb );
         return itemDb.toItem( );
     }
@@ -77,7 +76,7 @@ public class ItemServiceImpl implements ItemService {
                 .collect( Collectors.toList( ) );
 
         if( !descriptions.isEmpty( ) ) {
-            //throw new ApiValidationException( "Customer wasn't created because of: ", descriptions );
+            throw new ApiValidationException( "Item wasn't created because of: ", descriptions );
         }
     }
 }

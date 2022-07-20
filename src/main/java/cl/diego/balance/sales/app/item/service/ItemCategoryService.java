@@ -1,8 +1,11 @@
 package cl.diego.balance.sales.app.item.service;
 
 import cl.diego.balance.sales.app.item.dto.CategoryDto;
+import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
 
-public interface CategoryService {
+import java.util.List;
+
+public interface ItemCategoryService {
 
     void saveCategory( CategoryDto category ); //throws BadInputException;
 
@@ -10,4 +13,7 @@ public interface CategoryService {
 
     CategoryDto getCategoryById( Long id );// throws ItemNotFoundException;
 
+    ItemCategory findById( Long id );
+
+    List<ItemCategory> findAll( );
 }

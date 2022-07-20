@@ -1,9 +1,6 @@
 package cl.diego.balance.sales.app.item.controller;
 
-import cl.diego.balance.sales.app.item.dto.CategoryDto;
 import cl.diego.balance.sales.app.item.dto.ItemTypeDto;
-import cl.diego.balance.sales.app.item.repository.domain.ItemType;
-import cl.diego.balance.sales.app.item.service.CategoryService;
 import cl.diego.balance.sales.app.item.service.ItemTypeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

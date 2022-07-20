@@ -30,6 +30,9 @@ public class Item {
     private ItemType     itemTypeId;
 
     public Item( ItemDto itemDto ) {
+        if(itemDto.getId() != null) {
+            this.id = itemDto.getId();
+        }
         this.description = itemDto.getDescription( );
         this.sku         = itemDto.getSku( );
         this.price       = itemDto.getPrice( );

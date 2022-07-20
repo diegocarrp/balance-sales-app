@@ -1,6 +1,8 @@
 package cl.diego.balance.sales.app.sale.service;
 
 import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
+import cl.diego.balance.sales.app.item.service.ItemCategoryService;
+import cl.diego.balance.sales.app.item.service.ItemService;
 import cl.diego.balance.sales.app.sale.client.CustomerClient;
 import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
@@ -27,17 +29,20 @@ public class SaleServiceImpl implements SaleService {
     private final ItemCategoryService  itemCategoryService;
     private final SaleItemService      saleItemService;
     private final CustomerClient       customerClient;
+    private final ItemService          itemService;
 
     public SaleServiceImpl( SaleRepository saleRepository,
                             PaymentMethodService paymentMethodService,
                             ItemCategoryService itemCategoryService,
                             SaleItemService saleItemService,
-                            CustomerClient customerClient ) {
+                            CustomerClient customerClient,
+                            ItemService itemService ) {
         this.saleRepository       = saleRepository;
         this.paymentMethodService = paymentMethodService;
         this.itemCategoryService  = itemCategoryService;
         this.saleItemService      = saleItemService;
         this.customerClient       = customerClient;
+        this.itemService          = itemService;
     }
 
     @Override
@@ -69,13 +74,18 @@ public class SaleServiceImpl implements SaleService {
 
     private List<SaleItem> buildSaleItems( SaleDto sale,
                                            Sale saleDb ) {
+
         return sale.getItems( ).stream( )
-                .map( saleItemDto -> SaleItem.builder( )
-                        .sku( saleItemDto.getSku( ) )
-                        .total( saleItemDto.getTotal( ) )
-                        .quantity( saleItemDto.getQuantity( ) )
-                        .sale( saleDb )
-                        .build( ) )
+                .map( saleItemDto -> {
+                    itemService.getItemBySku( saleItemDto.getSku() );
+
+                    return SaleItem.builder( )
+                            .sku( saleItemDto.getSku( ) )
+                            .total( saleItemDto.getTotal( ) )
+                            .quantity( saleItemDto.getQuantity( ) )
+                            .sale( saleDb )
+                            .build( );
+                } )
                 .collect( Collectors.toList( ) );
     }
 

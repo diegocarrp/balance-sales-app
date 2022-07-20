@@ -1,7 +1,7 @@
 package cl.diego.balance.sales.app.item.controller;
 
 import cl.diego.balance.sales.app.item.dto.CategoryDto;
-import cl.diego.balance.sales.app.item.service.CategoryService;
+import cl.diego.balance.sales.app.item.service.ItemCategoryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    private final ItemCategoryService categoryService;
 
     @PostMapping( "/create" )
     public ResponseEntity<CategoryDto> createItem( @RequestBody CategoryDto category ) {

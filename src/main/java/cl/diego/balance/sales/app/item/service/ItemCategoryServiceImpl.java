@@ -1,6 +1,8 @@
 package cl.diego.balance.sales.app.item.service;
 
+import cl.diego.balance.commons.rest.exception.ApiValidationException;
 import cl.diego.balance.sales.app.item.dto.CategoryDto;
+import cl.diego.balance.sales.app.item.exception.ItemCategoryNotFoundException;
 import cl.diego.balance.sales.app.item.repository.ItemCategoryRepository;
 import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
 import jakarta.validation.ConstraintViolation;
@@ -16,12 +18,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class CategoryServiceImpl implements CategoryService {
+public class ItemCategoryServiceImpl implements ItemCategoryService {
 
     private final ItemCategoryRepository itemCategoryRepository;
     private final Validator              validator;
 
-    public CategoryServiceImpl( ItemCategoryRepository itemCategoryRepository ) {
+    public ItemCategoryServiceImpl( ItemCategoryRepository itemCategoryRepository ) {
         this.itemCategoryRepository = itemCategoryRepository;
         this.validator              = Validation.byDefaultProvider( )
                 .configure( )
@@ -39,15 +41,26 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategoryByDescription( String description ) {
         ItemCategory categoryDb = itemCategoryRepository.findByDescription( description )
-                .orElseThrow( );
+                .orElseThrow( ItemCategoryNotFoundException::new );
         return categoryDb.toItemType( );
     }
 
     @Override
     public CategoryDto getCategoryById( Long id ) {
         ItemCategory categoryDb = itemCategoryRepository.findById( id )
-                .orElseThrow( );
+                .orElseThrow( ItemCategoryNotFoundException::new );
         return categoryDb.toItemType( );
+    }
+
+    @Override
+    public ItemCategory findById( Long id ) {
+        return itemCategoryRepository.findById( id )
+                .orElseThrow( ItemCategoryNotFoundException::new );
+    }
+
+    @Override
+    public List<ItemCategory> findAll( ) {
+        return itemCategoryRepository.findAll( );
     }
 
     private void validateCategory( CategoryDto category ) {
@@ -57,7 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .collect( Collectors.toList( ) );
 
         if( !descriptions.isEmpty( ) ) {
-            //throw new ApiValidationException( "Customer wasn't created because of: ", descriptions );
+            throw new ApiValidationException( "Item Category wasn't created because of: ", descriptions );
         }
     }
 }

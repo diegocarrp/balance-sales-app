@@ -1,6 +1,8 @@
 package cl.diego.balance.sales.app.item.service;
 
+import cl.diego.balance.commons.rest.exception.ApiValidationException;
 import cl.diego.balance.sales.app.item.dto.ItemTypeDto;
+import cl.diego.balance.sales.app.item.exception.ItemTypeNotFoundException;
 import cl.diego.balance.sales.app.item.repository.ItemTypeRepository;
 import cl.diego.balance.sales.app.item.repository.domain.ItemType;
 import jakarta.validation.ConstraintViolation;
@@ -40,7 +42,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
     @Override
     public ItemTypeDto getItemTypeByDescription( String description ) {
         ItemType itemTypeDb = itemTypeRepository.findByDescription( description )
-                .orElseThrow( );
+                .orElseThrow( ItemTypeNotFoundException::new );
         return itemTypeDb.toItemType( );
     }
 
@@ -51,6 +53,12 @@ public class ItemTypeServiceImpl implements ItemTypeService {
         return itemTypeDb.toItemType( );
     }
 
+    @Override
+    public ItemType findById( Long id ) {
+        return itemTypeRepository.findById( id )
+                .orElseThrow( );
+    }
+
     private void validateItemType( ItemTypeDto itemType ) {
         Set<ConstraintViolation<ItemTypeDto>> violations = validator.validate( itemType );
         List<String> descriptions = violations.stream( )
@@ -58,7 +66,7 @@ public class ItemTypeServiceImpl implements ItemTypeService {
                 .collect( Collectors.toList( ) );
 
         if( !descriptions.isEmpty( ) ) {
-            //throw new ApiValidationException( "Customer wasn't created because of: ", descriptions );
+            throw new ApiValidationException( "ItemType wasn't created because of: ", descriptions );
         }
     }
 }

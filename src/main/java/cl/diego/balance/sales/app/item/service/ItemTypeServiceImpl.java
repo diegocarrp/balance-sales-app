@@ -49,14 +49,14 @@ public class ItemTypeServiceImpl implements ItemTypeService {
     @Override
     public ItemTypeDto getItemTypeById( Long id ) {
         ItemType itemTypeDb = itemTypeRepository.findById( id )
-                .orElseThrow( );
+                .orElseThrow( ItemTypeNotFoundException::new );
         return itemTypeDb.toItemType( );
     }
 
     @Override
     public ItemType findById( Long id ) {
         return itemTypeRepository.findById( id )
-                .orElseThrow( );
+                .orElseThrow( ItemTypeNotFoundException::new );
     }
 
     private void validateItemType( ItemTypeDto itemType ) {

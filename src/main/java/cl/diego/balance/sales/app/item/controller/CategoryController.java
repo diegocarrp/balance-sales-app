@@ -23,14 +23,14 @@ public class CategoryController {
         return new ResponseEntity<>( category, HttpStatus.CREATED );
     }
 
-    @GetMapping( "/description/{description}" )
+    @GetMapping( "/by-description/{description}" )
     public ResponseEntity<CategoryDto> getCategoryByDescription( @PathVariable String description ) {
         log.info( "CategoryController.getCategoryByDescription - description: <{}>", description );
         CategoryDto categoryFound = categoryService.getCategoryByDescription( description );
         return ResponseEntity.ok( categoryFound );
     }
 
-    @GetMapping( "/id/{id}" )
+    @GetMapping( "/by-id/{id}" )
     public ResponseEntity<CategoryDto> getCategoryById( @PathVariable Long id ) {
         log.info( "CategoryController.getCategoryById - id: <{}>", id );
         CategoryDto categoryFound = categoryService.getCategoryById( id );

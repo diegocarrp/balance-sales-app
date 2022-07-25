@@ -8,6 +8,7 @@ import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailItemDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
+import cl.diego.balance.sales.app.sale.dto.SaleResponseDto;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
 import cl.diego.balance.sales.app.sale.repository.domain.Payment;
 import cl.diego.balance.sales.app.sale.repository.domain.PaymentMethod;
@@ -103,10 +104,24 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public SaleDto getSaleById( Long id ) {
+    public SaleResponseDto getSaleById( Long id ) {
         Sale saleDb = saleRepository.findById( id )
                 .orElseThrow( );
-        return saleDb.toSale( );
+
+        CustomerDto customer = customerClient.findById( saleDb.getCustomerId( ) );
+        CustomerDto cashier = customerClient.findById( saleDb.getCashierId( ) );
+
+        SaleDto saleDto = saleDb.toSale();
+
+        return SaleResponseDto.builder()
+                .id( saleDto.getId() )
+                .customer( customer )
+                .cashier( cashier )
+                .items( saleDto.getItems() )
+                .payments( saleDto.getPayments() )
+                .datetime( saleDto.getDatetime() )
+                .totalAmount( saleDto.getTotalAmount() )
+                .build();
     }
 
     @Override

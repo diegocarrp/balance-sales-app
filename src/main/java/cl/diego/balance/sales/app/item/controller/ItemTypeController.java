@@ -23,14 +23,14 @@ public class ItemTypeController {
         return new ResponseEntity<>( itemType, HttpStatus.CREATED );
     }
 
-    @GetMapping( "/description/{description}" )
+    @GetMapping( "/by-description/{description}" )
     public ResponseEntity<ItemTypeDto> getCategoryByDescription( @PathVariable String description ) {
         log.info( "CategoryController.getCategoryByDescription - description: <{}>", description );
         ItemTypeDto itemTypeFound = itemTypeService.getItemTypeByDescription( description );
         return ResponseEntity.ok( itemTypeFound );
     }
 
-    @GetMapping( "/id/{id}" )
+    @GetMapping( "/by-id/{id}" )
     public ResponseEntity<ItemTypeDto> getCategoryById( @PathVariable Long id ) {
         log.info( "CategoryController.getCategoryById - id: <{}>", id );
         ItemTypeDto itemTypeFound = itemTypeService.getItemTypeById( id );

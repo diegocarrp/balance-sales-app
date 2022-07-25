@@ -13,6 +13,7 @@ import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class ItemCategoryServiceImpl implements ItemCategoryService {
 
     @Override
     public CategoryDto getCategoryByDescription( String description ) {
-        ItemCategory categoryDb = itemCategoryRepository.findByDescription( description )
+        ItemCategory categoryDb = itemCategoryRepository.findByDescription( description.toUpperCase( Locale.ROOT ) )
                 .orElseThrow( ItemCategoryNotFoundException::new );
         return categoryDb.toItemType( );
     }
@@ -72,5 +73,6 @@ public class ItemCategoryServiceImpl implements ItemCategoryService {
         if( !descriptions.isEmpty( ) ) {
             throw new ApiValidationException( "Item Category wasn't created because of: ", descriptions );
         }
+        category.setDescription( category.getDescription().toUpperCase() );
     }
 }

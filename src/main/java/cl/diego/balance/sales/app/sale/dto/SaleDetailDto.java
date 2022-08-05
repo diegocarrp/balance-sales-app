@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -13,6 +14,8 @@ import java.util.List;
 @Builder
 public class SaleDetailDto {
 
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private List<SaleDetailItemDto> details;
 
 }

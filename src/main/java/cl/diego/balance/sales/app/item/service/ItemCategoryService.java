@@ -5,6 +5,7 @@ import cl.diego.balance.sales.app.item.dto.CategoryDto;
 import cl.diego.balance.sales.app.item.exception.ItemCategoryNotFoundException;
 import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ItemCategoryService {

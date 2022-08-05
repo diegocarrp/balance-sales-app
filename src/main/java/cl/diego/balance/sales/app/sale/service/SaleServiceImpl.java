@@ -5,6 +5,7 @@ import cl.diego.balance.sales.app.item.service.ItemCategoryService;
 import cl.diego.balance.sales.app.item.service.ItemService;
 import cl.diego.balance.sales.app.sale.client.CustomerClient;
 import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
+import cl.diego.balance.sales.app.sale.config.ApplicationConfig;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailItemDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,19 +33,23 @@ public class SaleServiceImpl implements SaleService {
     private final SaleItemService      saleItemService;
     private final CustomerClient       customerClient;
     private final ItemService          itemService;
+    private final ApplicationConfig applicationConfig;
 
     public SaleServiceImpl( SaleRepository saleRepository,
                             PaymentMethodService paymentMethodService,
                             ItemCategoryService itemCategoryService,
                             SaleItemService saleItemService,
                             CustomerClient customerClient,
-                            ItemService itemService ) {
+                            ItemService itemService,
+                            ApplicationConfig applicationConfig ) {
         this.saleRepository       = saleRepository;
         this.paymentMethodService = paymentMethodService;
         this.itemCategoryService  = itemCategoryService;
         this.saleItemService      = saleItemService;
         this.customerClient       = customerClient;
         this.itemService          = itemService;
+        this.applicationConfig    = applicationConfig;
+        log.info( "ApplicationConfig:" + applicationConfig );
     }
 
     @Override
@@ -78,7 +84,7 @@ public class SaleServiceImpl implements SaleService {
 
         return sale.getItems( ).stream( )
                 .map( saleItemDto -> {
-                    itemService.getItemBySku( saleItemDto.getSku() );
+                    itemService.getItemBySku( saleItemDto.getSku( ) );
 
                     return SaleItem.builder( )
                             .sku( saleItemDto.getSku( ) )
@@ -111,25 +117,33 @@ public class SaleServiceImpl implements SaleService {
         CustomerDto customer = customerClient.findById( saleDb.getCustomerId( ) );
         CustomerDto cashier = customerClient.findById( saleDb.getCashierId( ) );
 
-        SaleDto saleDto = saleDb.toSale();
+        SaleDto saleDto = saleDb.toSale( );
 
-        return SaleResponseDto.builder()
-                .id( saleDto.getId() )
+        return SaleResponseDto.builder( )
+                .id( saleDto.getId( ) )
                 .customer( customer )
                 .cashier( cashier )
-                .items( saleDto.getItems() )
-                .payments( saleDto.getPayments() )
-                .datetime( saleDto.getDatetime() )
-                .totalAmount( saleDto.getTotalAmount() )
-                .build();
+                .items( saleDto.getItems( ) )
+                .payments( saleDto.getPayments( ) )
+                .datetime( saleDto.getDatetime( ) )
+                .totalAmount( saleDto.getTotalAmount( ) )
+                .build( );
     }
 
     @Override
-    public SaleDetailDto getSaleDetailByCategory( ) {
+    public SaleDetailDto getSaleDetailByCategory( LocalDateTime startDate,
+                                                  LocalDateTime endDate ) {
         List<ItemCategory> categories = itemCategoryService.findAll( );
 
+        if( endDate == null ) {
+            endDate = startDate.plusMonths( 1 );
+        }
+
+        saleRepository.findAllByDatetimeBetween( startDate, endDate );
+
+        LocalDateTime finalEndDate = endDate;
         List<SaleDetailItemDto> detailItems = categories.stream( ).map( cat -> {
-            BigDecimal categoryTotal = saleItemService.totalSaleByCategory( cat );
+            BigDecimal categoryTotal = saleItemService.totalSaleByCategory( startDate, finalEndDate, cat );
             return SaleDetailItemDto.builder( )
                     .category( cat.getDescription( ) )
                     .salesAmount( categoryTotal )
@@ -138,6 +152,8 @@ public class SaleServiceImpl implements SaleService {
 
         return SaleDetailDto.builder( )
                 .details( detailItems )
+                .endDate( endDate )
+                .startDate( startDate )
                 .build( );
     }
 }

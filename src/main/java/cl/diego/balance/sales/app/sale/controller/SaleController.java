@@ -6,8 +6,11 @@ import cl.diego.balance.sales.app.sale.dto.SaleResponseDto;
 import cl.diego.balance.sales.app.sale.service.SaleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping( "/sale" )
@@ -34,9 +37,10 @@ public class SaleController {
     }
 
     @GetMapping( "/by-category" )
-    public ResponseEntity<SaleDetailDto> getSaleDetailByCategory( ) {
+    public ResponseEntity<SaleDetailDto> getSaleDetailByCategory( @RequestParam @DateTimeFormat( pattern = "yyyy-MM-dd'T'HH:mm:ss" ) LocalDateTime startDate,
+                                                                  @RequestParam( required = false ) @DateTimeFormat( pattern = "yyyy-MM-dd'T'HH:mm:ss" ) LocalDateTime endDate ) {
         log.info( "Looking for sale detail by categories" );
-        SaleDetailDto saleDetailByCategory = saleService.getSaleDetailByCategory( );
+        SaleDetailDto saleDetailByCategory = saleService.getSaleDetailByCategory( startDate, endDate );
         return ResponseEntity.ok( saleDetailByCategory );
     }
 

@@ -15,3 +15,8 @@ spring:
     loadbalancer:
       ribbon:
         enable: false
+
+balance-sales:
+  config:
+    customer:
+      endpoint: ${CUSTOMER_ENDPOINT}

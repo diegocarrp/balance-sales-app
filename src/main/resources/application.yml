@@ -1,8 +1,4 @@
 spring:
-  datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USER}
-    password: ${DATASOURCE_PASSWORD}
   jpa:
     properties:
       hibernate:
@@ -15,6 +11,10 @@ spring:
     loadbalancer:
       ribbon:
         enable: false
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USER}
+    password: ${DATASOURCE_PASSWORD}
 
 balance-sales:
   config:

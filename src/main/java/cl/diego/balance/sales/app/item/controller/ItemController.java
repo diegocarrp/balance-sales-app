@@ -18,10 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping( "/item" )
 @Slf4j
-@AllArgsConstructor
+//@AllArgsConstructor
 public class ItemController {
 
     private final ItemService itemService;
+
+    public ItemController( ItemService itemService ) {
+        this.itemService = itemService;
+        log.info( "ItemService: {}", itemService.getClass() );
+    }
 
     @PostMapping( "/create" )
     public ResponseEntity<ItemDto> createItem( @RequestBody ItemDto item ) {

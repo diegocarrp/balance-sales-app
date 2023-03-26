@@ -5,7 +5,7 @@ import cl.diego.balance.sales.app.item.service.ItemCategoryService;
 import cl.diego.balance.sales.app.item.service.ItemService;
 import cl.diego.balance.sales.app.sale.client.CustomerClient;
 import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
-import cl.diego.balance.sales.app.sale.config.ApplicationConfig;
+import cl.diego.balance.sales.app.config.ApplicationConfig;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailItemDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;

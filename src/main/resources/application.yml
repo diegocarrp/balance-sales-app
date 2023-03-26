@@ -15,8 +15,32 @@ spring:
     loadbalancer:
       ribbon:
         enable: false
+  profiles:
+    active: ${ACTIVE_PROFILE}
+
+logging:
+  level:
+    cl.diego.balance: INFO
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
 
 balance-sales:
   config:
     customer:
       endpoint: ${CUSTOMER_ENDPOINT}
+    service: ONE
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+balance-sales:
+  config:
+    customer:
+      endpoint: http://localhost:8080/test-endpoint
+    service: TWO

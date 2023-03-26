@@ -1,4 +1,4 @@
-package cl.diego.balance.sales.app.sale.config;
+package cl.diego.balance.sales.app.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "balance-sales.config")
+@Data
 public class ApplicationConfig {
 
     private Api customer;

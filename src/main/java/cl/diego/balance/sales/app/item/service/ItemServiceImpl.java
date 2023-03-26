@@ -13,6 +13,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +21,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
+@Service
+@ConditionalOnProperty(value = "balance-sales.config.service", havingValue = "ONE", matchIfMissing = true)
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository      itemRepository;

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude( JsonInclude.Include.NON_NULL )
 public class ItemTypeDto {
 
-    private Long   id;
+    private String id;
     @NotNull
     private String description;
 

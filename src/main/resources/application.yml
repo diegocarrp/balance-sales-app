@@ -7,10 +7,6 @@ spring:
           use_jdbc_metadata_defaults: false
         format_sql: true
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-  cloud:
-    loadbalancer:
-      ribbon:
-        enable: false
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USER}

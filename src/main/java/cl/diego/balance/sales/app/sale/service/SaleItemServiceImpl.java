@@ -1,8 +1,8 @@
 package cl.diego.balance.sales.app.sale.service;
 
-import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
+import cl.diego.balance.sales.app.item.repository.model.ItemCategory;
 import cl.diego.balance.sales.app.sale.repository.SaleItemRepository;
-import cl.diego.balance.sales.app.sale.repository.domain.SaleItem;
+import cl.diego.balance.sales.app.sale.repository.model.SaleItem;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

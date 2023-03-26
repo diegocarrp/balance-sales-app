@@ -1,7 +1,7 @@
 package cl.diego.balance.sales.app.sale.repository;
 
-import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
-import cl.diego.balance.sales.app.sale.repository.domain.SaleItem;
+import cl.diego.balance.sales.app.item.repository.model.ItemCategory;
+import cl.diego.balance.sales.app.sale.repository.model.SaleItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,7 +14,7 @@ public interface SaleItemRepository extends JpaRepository<SaleItem, Long> {
             "join Sale s on si.sale  = s " +
             "join Item i on si.sku = i.sku " +
             "where s.datetime between :startDate and :endDate " +
-            "and i.itemCategoryId = :itemCategory")
+            "and i.itemCategory = :itemCategory")
     List<SaleItem> findAllByCategoryBetweenDates( LocalDateTime startDate, LocalDateTime endDate, ItemCategory itemCategory );
 
 }

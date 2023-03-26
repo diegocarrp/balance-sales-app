@@ -1,6 +1,6 @@
 package cl.diego.balance.sales.app.sale.service;
 
-import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
+import cl.diego.balance.sales.app.item.repository.model.ItemCategory;
 import cl.diego.balance.sales.app.item.service.ItemCategoryService;
 import cl.diego.balance.sales.app.item.service.ItemService;
 import cl.diego.balance.sales.app.sale.client.CustomerClient;
@@ -11,10 +11,10 @@ import cl.diego.balance.sales.app.sale.dto.SaleDetailItemDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
 import cl.diego.balance.sales.app.sale.dto.SaleResponseDto;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
-import cl.diego.balance.sales.app.sale.repository.domain.Payment;
-import cl.diego.balance.sales.app.sale.repository.domain.PaymentMethod;
-import cl.diego.balance.sales.app.sale.repository.domain.Sale;
-import cl.diego.balance.sales.app.sale.repository.domain.SaleItem;
+import cl.diego.balance.sales.app.sale.repository.model.Payment;
+import cl.diego.balance.sales.app.sale.repository.model.PaymentMethod;
+import cl.diego.balance.sales.app.sale.repository.model.Sale;
+import cl.diego.balance.sales.app.sale.repository.model.SaleItem;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -5,9 +5,9 @@ import cl.diego.balance.commons.rest.exception.ApiValidationException;
 import cl.diego.balance.sales.app.item.dto.ItemDto;
 import cl.diego.balance.sales.app.item.exception.ItemNotFoundException;
 import cl.diego.balance.sales.app.item.repository.ItemRepository;
-import cl.diego.balance.sales.app.item.repository.domain.Item;
-import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
-import cl.diego.balance.sales.app.item.repository.domain.ItemType;
+import cl.diego.balance.sales.app.item.repository.model.Item;
+import cl.diego.balance.sales.app.item.repository.model.ItemCategory;
+import cl.diego.balance.sales.app.item.repository.model.ItemType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -66,7 +66,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void deleteItem( Long id ) {
+    public void deleteItem( String id ) {
         itemRepository.deleteById( id );
     }
 

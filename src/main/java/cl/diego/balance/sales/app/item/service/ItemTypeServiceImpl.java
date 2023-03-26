@@ -4,7 +4,7 @@ import cl.diego.balance.commons.rest.exception.ApiValidationException;
 import cl.diego.balance.sales.app.item.dto.ItemTypeDto;
 import cl.diego.balance.sales.app.item.exception.ItemTypeNotFoundException;
 import cl.diego.balance.sales.app.item.repository.ItemTypeRepository;
-import cl.diego.balance.sales.app.item.repository.domain.ItemType;
+import cl.diego.balance.sales.app.item.repository.model.ItemType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -47,14 +47,14 @@ public class ItemTypeServiceImpl implements ItemTypeService {
     }
 
     @Override
-    public ItemTypeDto getItemTypeById( Long id ) {
+    public ItemTypeDto getItemTypeById( String id ) {
         ItemType itemTypeDb = itemTypeRepository.findById( id )
                 .orElseThrow( ItemTypeNotFoundException::new );
         return itemTypeDb.toItemType( );
     }
 
     @Override
-    public ItemType findById( Long id ) {
+    public ItemType findById( String id ) {
         return itemTypeRepository.findById( id )
                 .orElseThrow( ItemTypeNotFoundException::new );
     }

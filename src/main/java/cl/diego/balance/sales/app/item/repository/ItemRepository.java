@@ -1,14 +1,12 @@
 package cl.diego.balance.sales.app.item.repository;
 
 import cl.diego.balance.sales.app.item.repository.model.Item;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ItemRepository extends MongoRepository<Item, String> {
+public interface ItemRepository extends JpaRepository<Item, String> {
 
-    @Query("{sku: '?0'}")
     Optional<Item> findBySku(String sku);
 
 }

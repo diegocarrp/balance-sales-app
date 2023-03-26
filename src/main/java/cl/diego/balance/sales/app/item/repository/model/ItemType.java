@@ -2,7 +2,6 @@ package cl.diego.balance.sales.app.item.repository.model;
 
 import cl.diego.balance.sales.app.item.dto.ItemTypeDto;
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 
@@ -12,11 +11,24 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @ToString
-@Document("item_types")
+@Entity
+@Table(name = "item_type")
 public class ItemType {
 
     @Id
     private String id;
     private String description;
+
+    public ItemType( ItemTypeDto itemTypeDto ) {
+        this.id          = itemTypeDto.getId();
+        this.description = itemTypeDto.getDescription();
+    }
+
+    public ItemTypeDto toItemType() {
+        return ItemTypeDto.builder()
+                .id( this.id )
+                .description( this.description )
+                .build();
+    }
 
 }

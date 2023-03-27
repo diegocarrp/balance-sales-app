@@ -12,6 +12,6 @@ public interface ItemService {
 
     void updateItem( ItemDto Item ) throws BadInputException;
 
-    void deleteItem( Long id );
+    void deleteItem( String id );
 
 }

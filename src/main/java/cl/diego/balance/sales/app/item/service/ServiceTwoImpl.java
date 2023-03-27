@@ -28,7 +28,7 @@ public class ServiceTwoImpl implements ItemService{
     }
 
     @Override
-    public void deleteItem( Long id ) {
+    public void deleteItem( String id ) {
 
     }
 }

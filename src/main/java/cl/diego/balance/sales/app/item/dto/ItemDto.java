@@ -17,23 +17,23 @@ import java.math.BigDecimal;
 @JsonInclude( JsonInclude.Include.NON_NULL )
 public class ItemDto {
 
-    private Long       id;
+    private String     id;
     @NotNull
     private String     description;
     @NotBlank
     private String     sku;
     @NotNull
-    private Long       categoryId;
+    private String       categoryId;
     @NotNull
     private BigDecimal price;
     @NotNull
-    private Long       itemType;
+    private String       itemType;
 
     public void updateItem( ItemDto item ) {
-        this.description = item.getDescription( );
-        this.sku         = item.getSku( );
-        this.price       = item.getPrice( );
-        this.categoryId  = item.getCategoryId( );
-        this.itemType    = item.getItemType( );
+        this.description = item.getDescription();
+        this.sku         = item.getSku();
+        this.price       = item.getPrice();
+        this.categoryId  = item.getCategoryId();
+        this.itemType    = item.getItemType();
     }
 }

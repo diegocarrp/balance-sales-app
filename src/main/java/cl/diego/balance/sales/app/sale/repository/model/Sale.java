@@ -1,4 +1,4 @@
-package cl.diego.balance.sales.app.sale.repository.domain;
+package cl.diego.balance.sales.app.sale.repository.model;
 
 import cl.diego.balance.sales.app.sale.dto.PaymentDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;

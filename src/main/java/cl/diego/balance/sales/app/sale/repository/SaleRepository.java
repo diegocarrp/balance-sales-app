@@ -1,7 +1,7 @@
 package cl.diego.balance.sales.app.sale.repository;
 
-import cl.diego.balance.sales.app.item.repository.domain.ItemCategory;
-import cl.diego.balance.sales.app.sale.repository.domain.Sale;
+import cl.diego.balance.sales.app.item.repository.model.ItemCategory;
+import cl.diego.balance.sales.app.sale.repository.model.Sale;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

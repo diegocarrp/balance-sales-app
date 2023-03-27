@@ -13,10 +13,17 @@ spring:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USER}
     password: ${DATASOURCE_PASSWORD}
+  cloud:
+    loadbalancer:
+      ribbon:
+        enable: false
 
-logging:
-  level:
-    cl.diego.balance: INFO
+
+balance-sales:
+  config:
+    customer:
+      read-timeout: 30
+      connection-timeout: 30
 ---
 spring:
   config:

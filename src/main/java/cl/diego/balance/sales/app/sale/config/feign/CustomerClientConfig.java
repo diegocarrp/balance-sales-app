@@ -10,12 +10,14 @@ import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
 import feign.slf4j.Slf4jLogger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class CustomerClientConfig {
 
     private final String url;
@@ -32,6 +34,7 @@ public class CustomerClientConfig {
 
     @Bean
     public CustomerClient customerClient() {
+        log.info( "Creando el customerClient" );
         return Feign.builder( )
                 .encoder( new JacksonEncoder( List.of( new JavaTimeModule( ) ) ) )
                 .decoder( new JacksonDecoder( ) )

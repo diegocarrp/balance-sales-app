@@ -2,15 +2,17 @@ package cl.diego.balance.sales.app.sale.service;
 
 import cl.diego.balance.sales.app.config.ApplicationConfig;
 import cl.diego.balance.sales.app.item.dto.ItemDto;
+import cl.diego.balance.sales.app.item.exception.ItemNotFoundException;
 import cl.diego.balance.sales.app.item.service.ItemCategoryService;
 import cl.diego.balance.sales.app.item.service.ItemService;
 import cl.diego.balance.sales.app.sale.client.CustomerClient;
+import cl.diego.balance.sales.app.sale.client.customer.exception.CustomerNotFoundException;
 import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
+import cl.diego.balance.sales.app.sale.exception.IncompletePaymentException;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
 import cl.diego.balance.sales.app.sale.repository.model.PaymentMethod;
 import cl.diego.balance.sales.app.sale.repository.model.Sale;
-import feign.FeignException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,13 +27,14 @@ import java.math.BigDecimal;
 
 import static cl.diego.balance.commons.testing.UtilForTesting.getMappedObjectFromFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith( SpringExtension.class )
-@ContextConfiguration( classes = SaleServiceTest.TestConfiguration.class )
-class SaleServiceTest {
+@ContextConfiguration( classes = SaleServiceShould.TestConfiguration.class )
+class SaleServiceShould {
 
     static class TestConfiguration {
         @Bean
@@ -117,5 +120,52 @@ class SaleServiceTest {
         verify( paymentMethodService ).findById( anyLong( ) );
         verify( itemService, times( 2 ) ).getItemBySku( anyString( ) );
         verify( customerClient, times( 2 ) ).findById( anyLong( ) );
+    }
+
+    @Test
+    void failWithInvalidCustomer( ) {
+        when( customerClient.findById( 123L ) ).thenThrow( new CustomerNotFoundException( "123", "ID" ) );
+
+        assertThrows( CustomerNotFoundException.class, ( ) -> {
+            saleService.registerSale( saleOneDto );
+        } );
+    }
+
+    @Test
+    void failWithInvalidCashier( ) {
+        when( customerClient.findById( 321L ) ).thenThrow( new CustomerNotFoundException( "321", "ID" ) );
+
+        assertThrows( CustomerNotFoundException.class, ( ) -> {
+            saleService.registerSale( saleOneDto );
+        } );
+    }
+
+    @Test
+    void failWithUnexistantItem( ) {
+        when( customerClient.findById( 321L ) ).thenReturn( cashier );
+        when( customerClient.findById( 123L ) ).thenReturn( customer );
+        when( paymentMethodService.findById( 1L ) ).thenReturn( paymentMethod );
+        when( itemService.getItemBySku( "111" ) ).thenReturn( itemOneDto );
+        when( itemService.getItemBySku( "222" ) ).thenThrow( new ItemNotFoundException( ) );
+
+        assertThrows( ItemNotFoundException.class, ( ) -> {
+            saleService.registerSale( saleOneDto );
+        } );
+    }
+
+    @Test
+    void failWithIncompletePayment( ) {
+        when( customerClient.findById( 321L ) ).thenReturn( cashier );
+        when( customerClient.findById( 123L ) ).thenReturn( customer );
+        when( paymentMethodService.findById( 1L ) ).thenReturn( paymentMethod );
+        when( itemService.getItemBySku( "111" ) ).thenReturn( itemOneDto );
+        when( itemService.getItemBySku( "222" ) ).thenReturn( itemTwoDto );
+        when( saleRepository.save( any( ) ) ).thenReturn( saleOne );
+
+        saleOneDto.getPayments( ).get( 0 ).setAmount( new BigDecimal( 500 ) );
+
+        assertThrows( IncompletePaymentException.class, ( ) -> {
+            saleService.registerSale( saleOneDto );
+        } );
     }
 }

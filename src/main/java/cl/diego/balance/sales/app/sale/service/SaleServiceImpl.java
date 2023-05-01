@@ -10,6 +10,7 @@ import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailItemDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
 import cl.diego.balance.sales.app.sale.dto.SaleResponseDto;
+import cl.diego.balance.sales.app.sale.exception.IncompletePaymentException;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
 import cl.diego.balance.sales.app.sale.repository.model.Payment;
 import cl.diego.balance.sales.app.sale.repository.model.PaymentMethod;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -99,6 +101,8 @@ public class SaleServiceImpl implements SaleService {
 
     private List<Payment> buildPayments( SaleDto sale,
                                          Sale saleDb ) {
+        validateAmount( sale );
+
         return sale.getPayments( ).stream( )
                 .map( p -> {
                     PaymentMethod paymentMethod = paymentMethodService.findById( p.getPaymentMethodId( ) );
@@ -108,6 +112,16 @@ public class SaleServiceImpl implements SaleService {
                             .sale( saleDb )
                             .build( );
                 } ).collect( Collectors.toList( ) );
+    }
+
+    private void validateAmount( SaleDto sale ) {
+        Optional<BigDecimal> paymentsTotalAmount = sale.getPayments( ).stream( )
+                .map( pmnt -> pmnt.getAmount( ) )
+                .reduce( ( n1, n2 ) -> n1.add( n2 ) );
+
+        paymentsTotalAmount.ifPresent( amount -> {
+            if( amount.compareTo( sale.getTotalAmount( ) ) != 0 ) throw new IncompletePaymentException( );
+        } );
     }
 
     @Override

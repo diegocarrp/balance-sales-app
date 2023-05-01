@@ -8,10 +8,11 @@ import java.time.LocalDateTime;
 
 public interface SaleService {
 
-    void registerSale( SaleDto sale );
+    SaleDto registerSale( SaleDto sale );
 
     SaleResponseDto getSaleById( Long id );
 
-    SaleDetailDto getSaleDetailByCategory( LocalDateTime startDate, LocalDateTime endDate );
+    SaleDetailDto getSaleDetailByCategory( LocalDateTime startDate,
+                                           LocalDateTime endDate );
 
 }

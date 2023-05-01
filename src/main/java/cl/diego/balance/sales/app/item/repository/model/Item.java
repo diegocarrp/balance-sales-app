@@ -32,7 +32,9 @@ public class Item {
     @JoinColumn( name = "item_type_id" )
     private ItemType     itemType;
 
-    public Item( ItemDto itemDto, ItemCategory itemCategory, ItemType itemType ) {
+    public Item( ItemDto itemDto,
+                 ItemCategory itemCategory,
+                 ItemType itemType ) {
         this.id           = itemDto.getId( );
         this.description  = itemDto.getDescription( );
         this.sku          = itemDto.getSku( );
@@ -42,21 +44,21 @@ public class Item {
     }
 
     public Item( ItemDto itemDto ) {
-        this.id           = itemDto.getId( );
-        this.description  = itemDto.getDescription( );
-        this.sku          = itemDto.getSku( );
-        this.price        = itemDto.getPrice( );
+        this.id          = itemDto.getId( );
+        this.description = itemDto.getDescription( );
+        this.sku         = itemDto.getSku( );
+        this.price       = itemDto.getPrice( );
     }
 
-    public ItemDto toItem() {
-        return ItemDto.builder()
+    public ItemDto toItem( ) {
+        return ItemDto.builder( )
                 .id( this.id )
                 .description( this.description )
                 .sku( this.sku )
                 .price( this.price )
-                .categoryId( this.itemCategory.getId() )
-                .itemType( this.itemType.getId() )
-                .build();
+                .category( this.itemCategory.getId( ) )
+                .itemType( this.itemType.getId( ) )
+                .build( );
     }
 
 }

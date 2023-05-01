@@ -1,0 +1,24 @@
+{
+  "customerId": 123,
+  "cashierId": 321,
+  "totalAmount": 2500,
+  "datetime": "2023-04-27 23:10:00",
+  "items": [
+    {
+      "sku": "111",
+      "quantity": 2,
+      "total": 1500
+    },
+    {
+      "sku": "222",
+      "quantity": 2,
+      "total": 1000
+    }
+  ],
+  "payments": [
+    {
+      "paymentMethodId": 1,
+      "amount": 2500
+    }
+  ]
+}

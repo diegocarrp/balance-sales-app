@@ -3,6 +3,7 @@ package cl.diego.balance.sales.app.sale.repository.model;
 import cl.diego.balance.sales.app.sale.dto.PaymentDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
 import cl.diego.balance.sales.app.sale.dto.SaleItemDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class Sale {
     private Long           customerId;
     private Long           cashierId;
     private BigDecimal     totalAmount;
+    @JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
     private LocalDateTime  datetime;
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
     @JoinColumn( name = "sale_id" )
@@ -43,20 +45,20 @@ public class Sale {
                 .cashierId( this.cashierId )
                 .totalAmount( this.totalAmount )
                 .datetime( this.datetime )
-                .items( this.items.stream()
-                        .map( i -> SaleItemDto.builder()
-                                .id( i.getId() )
-                                .sku( i.getSku() )
-                                .quantity( i.getQuantity() )
-                                .total( i.getTotal() )
-                                .build() )
-                        .collect( Collectors.toList()) )
-                .payments( this.payments.stream()
-                        .map( p -> PaymentDto.builder()
-                                .paymentMethodId( p.getPaymentMethod().getId() )
-                                .amount( p.getAmount() )
-                                .build() )
-                        .collect( Collectors.toList()) )
+                .items( this.items.stream( )
+                        .map( item -> SaleItemDto.builder( )
+                                .id( item.getId( ) )
+                                .sku( item.getSku( ) )
+                                .quantity( item.getQuantity( ) )
+                                .total( item.getTotal( ) )
+                                .build( ) )
+                        .collect( Collectors.toList( ) ) )
+                .payments( this.payments.stream( )
+                        .map( payment -> PaymentDto.builder( )
+                                .paymentMethodId( payment.getPaymentMethod( ).getId( ) )
+                                .amount( payment.getAmount( ) )
+                                .build( ) )
+                        .collect( Collectors.toList( ) ) )
                 .build( );
     }
 }

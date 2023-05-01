@@ -23,17 +23,17 @@ public class ItemDto {
     @NotBlank
     private String     sku;
     @NotNull
-    private String       categoryId;
-    @NotNull
     private BigDecimal price;
     @NotNull
-    private String       itemType;
+    private String     category;
+    @NotNull
+    private String     itemType;
 
     public void updateItem( ItemDto item ) {
-        this.description = item.getDescription();
-        this.sku         = item.getSku();
-        this.price       = item.getPrice();
-        this.categoryId  = item.getCategoryId();
-        this.itemType    = item.getItemType();
+        this.description = item.getDescription( );
+        this.sku         = item.getSku( );
+        this.price       = item.getPrice( );
+        this.category    = item.getCategory( );
+        this.itemType    = item.getItemType( );
     }
 }

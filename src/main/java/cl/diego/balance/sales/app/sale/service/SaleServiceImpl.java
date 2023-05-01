@@ -33,7 +33,7 @@ public class SaleServiceImpl implements SaleService {
     private final SaleItemService      saleItemService;
     private final CustomerClient       customerClient;
     private final ItemService          itemService;
-    private final ApplicationConfig applicationConfig;
+    private final ApplicationConfig    applicationConfig;
 
     public SaleServiceImpl( SaleRepository saleRepository,
                             PaymentMethodService paymentMethodService,
@@ -53,7 +53,7 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public void registerSale( SaleDto sale ) {
+    public SaleDto registerSale( SaleDto sale ) {
 
         Sale saleDb = buildSale( sale );
 
@@ -63,7 +63,8 @@ public class SaleServiceImpl implements SaleService {
         List<SaleItem> items = buildSaleItems( sale, saleDb );
         saleDb.setItems( items );
 
-        saleRepository.save( saleDb );
+        Sale savedSale = saleRepository.save( saleDb );
+        return savedSale.toSale( );
     }
 
     private Sale buildSale( SaleDto sale ) {
@@ -72,8 +73,8 @@ public class SaleServiceImpl implements SaleService {
         CustomerDto cashier = customerClient.findById( sale.getCashierId( ) );
 
         return Sale.builder( )
-                .customerId( sale.getCustomerId( ) )
-                .cashierId( sale.getCashierId( ) )
+                .customerId( customer.getId( ) )
+                .cashierId( cashier.getId( ) )
                 .datetime( sale.getDatetime( ) )
                 .totalAmount( sale.getTotalAmount( ) )
                 .build( );

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@ConditionalOnProperty(value = "balance-sales.config.service", havingValue = "ONE", matchIfMissing = true)
+@ConditionalOnProperty( value = "balance-sales.config.service", havingValue = "ONE", matchIfMissing = true )
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository      itemRepository;
@@ -47,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void saveItem( ItemDto item ) throws BadInputException {
         validateItem( item );
-        ItemCategory category = itemCategoryService.findById( item.getCategoryId( ) );
+        ItemCategory category = itemCategoryService.findById( item.getCategory( ) );
         ItemType type = itemTypeService.findById( item.getItemType( ) );
         itemRepository.save( new Item( item, category, type ) );
     }
@@ -78,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
                 .map( v -> v.getPropertyPath( ) + " - " + v.getMessage( ) )
                 .collect( Collectors.toList( ) );
 
-        Optional<Item> dbItem = itemRepository.findBySku( item.getSku() );
+        Optional<Item> dbItem = itemRepository.findBySku( item.getSku( ) );
         if( dbItem.isPresent( ) ) {
             descriptions.add( "sku - sku already exists" );
         }

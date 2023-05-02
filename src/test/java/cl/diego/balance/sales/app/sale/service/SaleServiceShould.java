@@ -9,6 +9,7 @@ import cl.diego.balance.sales.app.sale.client.CustomerClient;
 import cl.diego.balance.sales.app.sale.client.customer.exception.CustomerNotFoundException;
 import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
+import cl.diego.balance.sales.app.sale.dto.request.SaleRequest;
 import cl.diego.balance.sales.app.sale.exception.IncompletePaymentException;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
 import cl.diego.balance.sales.app.sale.repository.model.PaymentMethod;
@@ -73,6 +74,7 @@ class SaleServiceShould {
     @MockBean
     private ApplicationConfig    applicationConfig;
 
+    private static SaleRequest   saleRequest;
     private static SaleDto       saleOneDto;
     private static Sale          saleOne;
     private static CustomerDto   cashier;
@@ -91,6 +93,7 @@ class SaleServiceShould {
 
     @BeforeAll
     static void setUp( ) throws IOException {
+        saleRequest   = getMappedObjectFromFile( SALE_DTO_ONE, SaleRequest.class );
         saleOneDto    = getMappedObjectFromFile( SALE_DTO_ONE, SaleDto.class );
         saleOne       = getMappedObjectFromFile( SALE_ONE, Sale.class );
         cashier       = getMappedObjectFromFile( CASHIER, CustomerDto.class );
@@ -109,7 +112,7 @@ class SaleServiceShould {
         when( itemService.getItemBySku( "222" ) ).thenReturn( itemTwoDto );
         when( saleRepository.save( any( ) ) ).thenReturn( saleOne );
 
-        SaleDto saleDto = saleService.registerSale( saleOneDto );
+        SaleDto saleDto = saleService.registerSale( saleRequest );
 
         assertEquals( BigDecimal.valueOf( 2500 ), saleDto.getTotalAmount( ) );
         assertEquals( 321L, saleDto.getCashierId( ) );
@@ -127,7 +130,7 @@ class SaleServiceShould {
         when( customerClient.findById( 123L ) ).thenThrow( new CustomerNotFoundException( "123", "ID" ) );
 
         assertThrows( CustomerNotFoundException.class, ( ) -> {
-            saleService.registerSale( saleOneDto );
+            saleService.registerSale( saleRequest );
         } );
     }
 
@@ -136,7 +139,7 @@ class SaleServiceShould {
         when( customerClient.findById( 321L ) ).thenThrow( new CustomerNotFoundException( "321", "ID" ) );
 
         assertThrows( CustomerNotFoundException.class, ( ) -> {
-            saleService.registerSale( saleOneDto );
+            saleService.registerSale( saleRequest );
         } );
     }
 
@@ -149,7 +152,7 @@ class SaleServiceShould {
         when( itemService.getItemBySku( "222" ) ).thenThrow( new ItemNotFoundException( ) );
 
         assertThrows( ItemNotFoundException.class, ( ) -> {
-            saleService.registerSale( saleOneDto );
+            saleService.registerSale( saleRequest );
         } );
     }
 
@@ -165,7 +168,12 @@ class SaleServiceShould {
         saleOneDto.getPayments( ).get( 0 ).setAmount( new BigDecimal( 500 ) );
 
         assertThrows( IncompletePaymentException.class, ( ) -> {
-            saleService.registerSale( saleOneDto );
+            saleService.registerSale( saleRequest );
         } );
+    }
+
+    @Test
+    void returnSaleDetailsForCategories( ) {
+
     }
 }

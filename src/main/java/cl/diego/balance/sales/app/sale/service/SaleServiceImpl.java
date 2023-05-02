@@ -10,6 +10,7 @@ import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDetailItemDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
 import cl.diego.balance.sales.app.sale.dto.SaleResponseDto;
+import cl.diego.balance.sales.app.sale.dto.request.SaleRequest;
 import cl.diego.balance.sales.app.sale.exception.IncompletePaymentException;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
 import cl.diego.balance.sales.app.sale.repository.model.Payment;
@@ -55,7 +56,9 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public SaleDto registerSale( SaleDto sale ) {
+    public SaleDto registerSale( SaleRequest request ) {
+
+        SaleDto sale = new SaleDto( request );
 
         Sale saleDb = buildSale( sale );
 
@@ -114,13 +117,13 @@ public class SaleServiceImpl implements SaleService {
                 } ).collect( Collectors.toList( ) );
     }
 
-    private void validateAmount( SaleDto sale ) {
-        Optional<BigDecimal> paymentsTotalAmount = sale.getPayments( ).stream( )
+    private void validateAmount( SaleDto saleDto ) {
+        Optional<BigDecimal> paymentsTotalAmount = saleDto.getPayments( ).stream( )
                 .map( pmnt -> pmnt.getAmount( ) )
                 .reduce( ( n1, n2 ) -> n1.add( n2 ) );
 
         paymentsTotalAmount.ifPresent( amount -> {
-            if( amount.compareTo( sale.getTotalAmount( ) ) != 0 ) throw new IncompletePaymentException( );
+            if( amount.compareTo( saleDto.getTotalAmount( ) ) != 0 ) throw new IncompletePaymentException( );
         } );
     }
 

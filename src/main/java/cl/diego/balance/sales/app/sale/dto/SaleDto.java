@@ -39,7 +39,9 @@ public class SaleDto {
                 .build( ) ).collect( Collectors.toList( ) );
         this.payments    = request.payments( ).stream( ).map( payment -> PaymentDto.builder( )
                 .amount( payment.amount( ) )
-                .paymentMethodId( payment.id( ) )
+                .id( payment.id( ) )
                 .build( ) ).collect( Collectors.toList( ) );
     }
+
+
 }

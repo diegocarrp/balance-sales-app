@@ -1,13 +1,13 @@
 package cl.diego.balance.sales.app.item.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sun.istack.NotNull;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
@@ -20,7 +20,7 @@ public class ItemDto {
     private String     id;
     @NotNull
     private String     description;
-    @NotBlank
+    @NotEmpty
     private String     sku;
     @NotNull
     private BigDecimal price;

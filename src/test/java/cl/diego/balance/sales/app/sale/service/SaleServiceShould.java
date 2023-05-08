@@ -9,12 +9,14 @@ import cl.diego.balance.sales.app.sale.client.CustomerClient;
 import cl.diego.balance.sales.app.sale.client.customer.exception.CustomerNotFoundException;
 import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
+import cl.diego.balance.sales.app.sale.dto.request.PaymentRequest;
 import cl.diego.balance.sales.app.sale.dto.request.SaleRequest;
 import cl.diego.balance.sales.app.sale.exception.IncompletePaymentException;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
 import cl.diego.balance.sales.app.sale.repository.model.PaymentMethod;
 import cl.diego.balance.sales.app.sale.repository.model.Sale;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +93,8 @@ class SaleServiceShould {
     private static final String ITEM_ONE       = "sale/itemOne.json";
     private static final String ITEM_TWO       = "sale/itemTwo.json";
 
-    @BeforeAll
-    static void setUp( ) throws IOException {
+    @BeforeEach
+    void setUp( ) throws IOException {
         saleRequest   = getMappedObjectFromFile( SALE_DTO_ONE, SaleRequest.class );
         saleOneDto    = getMappedObjectFromFile( SALE_DTO_ONE, SaleDto.class );
         saleOne       = getMappedObjectFromFile( SALE_ONE, Sale.class );
@@ -120,7 +122,7 @@ class SaleServiceShould {
         assertEquals( saleOneDto.getDatetime( ), saleDto.getDatetime( ) );
 
         verify( saleRepository ).save( any( ) );
-        verify( paymentMethodService ).findById( anyLong( ) );
+        verify( paymentMethodService ).findById( 1L );
         verify( itemService, times( 2 ) ).getItemBySku( anyString( ) );
         verify( customerClient, times( 2 ) ).findById( anyLong( ) );
     }
@@ -165,7 +167,7 @@ class SaleServiceShould {
         when( itemService.getItemBySku( "222" ) ).thenReturn( itemTwoDto );
         when( saleRepository.save( any( ) ) ).thenReturn( saleOne );
 
-        saleOneDto.getPayments( ).get( 0 ).setAmount( new BigDecimal( 500 ) );
+        saleRequest.payments( ).set( 0, new PaymentRequest( 1L, new BigDecimal( 500 ) ) );
 
         assertThrows( IncompletePaymentException.class, ( ) -> {
             saleService.registerSale( saleRequest );

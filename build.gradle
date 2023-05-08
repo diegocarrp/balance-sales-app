@@ -5,7 +5,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '2.7.0'
+    id 'org.springframework.boot' version '2.7.11'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id "org.flywaydb.flyway" version "8.5.13"
@@ -35,25 +35,25 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'io.github.openfeign:feign-okhttp:12.3'
+    implementation 'io.github.openfeign:feign-jackson:12.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.1'
+    implementation 'org.springframework.cloud:spring-cloud-dependencies:2022.0.2'
+    testImplementation 'junit:junit'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
-    implementation 'cl.diego:balance-commons:0.0.1-SNAPSHOT'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'io.github.openfeign:feign-okhttp:12.2'
-    implementation 'io.github.openfeign:feign-gson:12.2'
-    implementation 'io.github.openfeign:feign-slf4j:12.2'
-    implementation 'io.github.openfeign:feign-jackson:12.2'
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.6'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'cl.diego:balance-commons:0.0.1-SNAPSHOT'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }

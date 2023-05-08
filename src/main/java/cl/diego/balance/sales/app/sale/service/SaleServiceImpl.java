@@ -108,7 +108,7 @@ public class SaleServiceImpl implements SaleService {
 
         return sale.getPayments( ).stream( )
                 .map( p -> {
-                    PaymentMethod paymentMethod = paymentMethodService.findById( p.getPaymentMethodId( ) );
+                    PaymentMethod paymentMethod = paymentMethodService.findById( p.getId( ) );
                     return Payment.builder( )
                             .amount( p.getAmount( ) )
                             .paymentMethod( paymentMethod )

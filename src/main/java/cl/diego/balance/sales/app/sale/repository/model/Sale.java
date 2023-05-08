@@ -55,7 +55,7 @@ public class Sale {
                         .collect( Collectors.toList( ) ) )
                 .payments( this.payments.stream( )
                         .map( payment -> PaymentDto.builder( )
-                                .paymentMethodId( payment.getPaymentMethod( ).getId( ) )
+                                .id( payment.getPaymentMethod( ).getId( ) )
                                 .amount( payment.getAmount( ) )
                                 .build( ) )
                         .collect( Collectors.toList( ) ) )

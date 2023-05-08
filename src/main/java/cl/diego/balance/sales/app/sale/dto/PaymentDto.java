@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class PaymentDto {
 
-    private Long paymentMethodId;
+    private Long       id;
     private BigDecimal amount;
 }

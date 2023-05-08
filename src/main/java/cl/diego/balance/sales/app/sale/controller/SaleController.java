@@ -1,6 +1,7 @@
 package cl.diego.balance.sales.app.sale.controller;
 
 import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
+import cl.diego.balance.sales.app.sale.dto.SaleDto;
 import cl.diego.balance.sales.app.sale.dto.SaleResponseDto;
 import cl.diego.balance.sales.app.sale.dto.request.SaleRequest;
 import cl.diego.balance.sales.app.sale.service.SaleService;
@@ -21,11 +22,11 @@ public class SaleController {
     private final SaleService saleService;
 
     @PostMapping( "/register" )
-    public ResponseEntity<Void> registerSale( @RequestBody SaleRequest saleRequest ) {
+    public ResponseEntity<SaleDto> registerSale( @RequestBody SaleRequest saleRequest ) {
         log.info( "Registering sale with body: <{}>", saleRequest );
-        
-        saleService.registerSale( saleRequest );
-        return ResponseEntity.ok( ).build( );
+
+        SaleDto response = saleService.registerSale( saleRequest );
+        return ResponseEntity.ok( response );
     }
 
     @GetMapping( "/by-id/{id}" )

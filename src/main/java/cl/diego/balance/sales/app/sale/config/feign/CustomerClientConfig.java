@@ -33,7 +33,7 @@ public class CustomerClientConfig {
     }
 
     @Bean
-    public CustomerClient customerClient() {
+    public CustomerClient customerClient( ) {
         log.info( "Creando el customerClient" );
         return Feign.builder( )
                 .encoder( new JacksonEncoder( List.of( new JavaTimeModule( ) ) ) )

@@ -1,5 +1,6 @@
 package cl.diego.balance.sales.app.sale.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,10 @@ import java.util.List;
 @Builder
 public class SaleDetailDto {
 
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    @JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
+    private LocalDateTime           startDate;
+    @JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss" )
+    private LocalDateTime           endDate;
     private List<SaleDetailItemDto> details;
 
 }

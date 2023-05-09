@@ -6,10 +6,7 @@ import cl.diego.balance.sales.app.item.service.ItemService;
 import cl.diego.balance.sales.app.sale.client.CustomerClient;
 import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
 import cl.diego.balance.sales.app.config.ApplicationConfig;
-import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
-import cl.diego.balance.sales.app.sale.dto.SaleDetailItemDto;
-import cl.diego.balance.sales.app.sale.dto.SaleDto;
-import cl.diego.balance.sales.app.sale.dto.SaleResponseDto;
+import cl.diego.balance.sales.app.sale.dto.*;
 import cl.diego.balance.sales.app.sale.dto.request.SaleRequest;
 import cl.diego.balance.sales.app.sale.exception.IncompletePaymentException;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
@@ -119,8 +116,8 @@ public class SaleServiceImpl implements SaleService {
 
     private void validateAmount( SaleDto saleDto ) {
         Optional<BigDecimal> paymentsTotalAmount = saleDto.getPayments( ).stream( )
-                .map( pmnt -> pmnt.getAmount( ) )
-                .reduce( ( n1, n2 ) -> n1.add( n2 ) );
+                .map( PaymentDto::getAmount )
+                .reduce( BigDecimal::add );
 
         paymentsTotalAmount.ifPresent( amount -> {
             if( amount.compareTo( saleDto.getTotalAmount( ) ) != 0 ) throw new IncompletePaymentException( );
@@ -156,8 +153,6 @@ public class SaleServiceImpl implements SaleService {
         if( endDate == null ) {
             endDate = startDate.plusMonths( 1 );
         }
-
-        saleRepository.findAllByDatetimeBetween( startDate, endDate );
 
         LocalDateTime finalEndDate = endDate;
         List<SaleDetailItemDto> detailItems = categories.stream( ).map( cat -> {

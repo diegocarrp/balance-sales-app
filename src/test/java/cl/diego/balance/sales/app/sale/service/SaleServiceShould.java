@@ -3,11 +3,13 @@ package cl.diego.balance.sales.app.sale.service;
 import cl.diego.balance.sales.app.config.ApplicationConfig;
 import cl.diego.balance.sales.app.item.dto.ItemDto;
 import cl.diego.balance.sales.app.item.exception.ItemNotFoundException;
+import cl.diego.balance.sales.app.item.repository.model.ItemCategory;
 import cl.diego.balance.sales.app.item.service.ItemCategoryService;
 import cl.diego.balance.sales.app.item.service.ItemService;
 import cl.diego.balance.sales.app.sale.client.CustomerClient;
 import cl.diego.balance.sales.app.sale.client.customer.exception.CustomerNotFoundException;
 import cl.diego.balance.sales.app.sale.client.dto.CustomerDto;
+import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
 import cl.diego.balance.sales.app.sale.dto.request.PaymentRequest;
 import cl.diego.balance.sales.app.sale.dto.request.SaleRequest;
@@ -15,7 +17,6 @@ import cl.diego.balance.sales.app.sale.exception.IncompletePaymentException;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
 import cl.diego.balance.sales.app.sale.repository.model.PaymentMethod;
 import cl.diego.balance.sales.app.sale.repository.model.Sale;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static cl.diego.balance.commons.testing.UtilForTesting.getMappedObjectFromFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -85,6 +89,8 @@ class SaleServiceShould {
     private static ItemDto       itemOneDto;
     private static ItemDto       itemTwoDto;
 
+    private static SaleDetailDto saleDetail;
+
     private static final String SALE_DTO_ONE   = "sale/saleDtoOne.json";
     private static final String SALE_ONE       = "sale/saleOne.json";
     private static final String CASHIER        = "sale/cashier.json";
@@ -92,6 +98,8 @@ class SaleServiceShould {
     private static final String PAYMENT_METHOD = "sale/paymentMethod.json";
     private static final String ITEM_ONE       = "sale/itemOne.json";
     private static final String ITEM_TWO       = "sale/itemTwo.json";
+
+    private static final String SALE_DETAIL = "saleDetail/saleDetail.json";
 
     @BeforeEach
     void setUp( ) throws IOException {
@@ -103,6 +111,8 @@ class SaleServiceShould {
         paymentMethod = getMappedObjectFromFile( PAYMENT_METHOD, PaymentMethod.class );
         itemOneDto    = getMappedObjectFromFile( ITEM_ONE, ItemDto.class );
         itemTwoDto    = getMappedObjectFromFile( ITEM_TWO, ItemDto.class );
+
+        saleDetail = getMappedObjectFromFile( SALE_DETAIL, SaleDetailDto.class );
     }
 
     @Test
@@ -177,5 +187,29 @@ class SaleServiceShould {
     @Test
     void returnSaleDetailsForCategories( ) {
 
+        LocalDateTime startDate = LocalDateTime.of( 2021, 1, 11, 9, 6 );
+        LocalDateTime endDate = LocalDateTime.of( 2023, 5, 9, 0, 17 );
+
+        List<ItemCategory> categories = new ArrayList<>( );
+        categories.add( new ItemCategory( "1", "Electronics" ) );
+        categories.add( new ItemCategory( "2", "Furniture" ) );
+        categories.add( new ItemCategory( "3", "Pets" ) );
+        categories.add( new ItemCategory( "4", "Consoles" ) );
+
+        when( itemCategoryService.findAll( ) ).thenReturn( categories );
+        when( saleItemService.totalSaleByCategory( any( ),
+                any( ),
+                any( ) ) ).thenReturn( BigDecimal.valueOf( 1239800 ) )
+                .thenReturn( BigDecimal.valueOf( 989800 ) )
+                .thenReturn( BigDecimal.valueOf( 519800 ) )
+                .thenReturn( BigDecimal.valueOf( 9790230 ) );
+
+
+        SaleDetailDto response = saleService.getSaleDetailByCategory( startDate, endDate );
+
+        assertEquals( saleDetail, response );
+
+        verify( itemCategoryService, times( 1 ) ).findAll( );
+        verify( saleItemService, times( 4 ) ).totalSaleByCategory( any( ), any( ), any( ) );
     }
 }

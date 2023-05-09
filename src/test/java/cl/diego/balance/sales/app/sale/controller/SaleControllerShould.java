@@ -6,7 +6,6 @@ import cl.diego.balance.sales.app.sale.dto.request.SaleRequest;
 import cl.diego.balance.sales.app.sale.service.SaleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest( SaleController.class )
 public class SaleControllerShould {
@@ -43,7 +43,6 @@ public class SaleControllerShould {
 
     private static ObjectMapper mapper;
 
-
     @BeforeAll
     static void setUp( ) throws IOException {
         saleRequest = getMappedObjectFromFile( SALE_ONE, SaleRequest.class );
@@ -51,7 +50,6 @@ public class SaleControllerShould {
 
         mapper = new ObjectMapper( ).registerModule( new JavaTimeModule( ) );
     }
-
 
     @Test
     void registerSale_givenValidRequest( ) throws Exception {

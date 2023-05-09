@@ -1,0 +1,22 @@
+{
+  "startDate": "2021-01-11 09:06:00",
+  "endDate": "2023-05-09 00:17:00",
+  "details": [
+    {
+      "category": "Electronics",
+      "salesAmount": 1239800
+    },
+    {
+      "category": "Furniture",
+      "salesAmount": 989800
+    },
+    {
+      "category": "Pets",
+      "salesAmount": 519800
+    },
+    {
+      "category": "Consoles",
+      "salesAmount": 9790230
+    }
+  ]
+}

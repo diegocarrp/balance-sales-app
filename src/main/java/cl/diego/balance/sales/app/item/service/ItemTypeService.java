@@ -9,8 +9,8 @@ public interface ItemTypeService {
 
     ItemTypeDto getItemTypeByDescription( String description );// throws ItemNotFoundException;
 
-    ItemTypeDto getItemTypeById( String id );// throws ItemNotFoundException;
+    ItemTypeDto getItemTypeById( Long id );// throws ItemNotFoundException;
 
-    ItemType findById( String id );
+    ItemType findById( Long id );
 
 }

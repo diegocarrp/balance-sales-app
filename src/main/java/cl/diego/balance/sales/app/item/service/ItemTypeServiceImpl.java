@@ -47,14 +47,14 @@ public class ItemTypeServiceImpl implements ItemTypeService {
     }
 
     @Override
-    public ItemTypeDto getItemTypeById( String id ) {
+    public ItemTypeDto getItemTypeById( Long id ) {
         ItemType itemTypeDb = itemTypeRepository.findById( id )
                 .orElseThrow( ItemTypeNotFoundException::new );
         return itemTypeDb.toItemType( );
     }
 
     @Override
-    public ItemType findById( String id ) {
+    public ItemType findById( Long id ) {
         return itemTypeRepository.findById( id )
                 .orElseThrow( ItemTypeNotFoundException::new );
     }

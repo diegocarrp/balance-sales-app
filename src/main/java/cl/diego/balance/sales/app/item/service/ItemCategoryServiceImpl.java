@@ -47,14 +47,14 @@ public class ItemCategoryServiceImpl implements ItemCategoryService {
     }
 
     @Override
-    public CategoryDto getCategoryById( String id ) {
+    public CategoryDto getCategoryById( Long id ) {
         ItemCategory categoryDb = itemCategoryRepository.findById( id )
                 .orElseThrow( ItemCategoryNotFoundException::new );
         return categoryDb.toItemCategory();
     }
 
     @Override
-    public ItemCategory findById( String id ) {
+    public ItemCategory findById( Long id ) {
         return itemCategoryRepository.findById( id )
                 .orElseThrow( ItemCategoryNotFoundException::new );
     }

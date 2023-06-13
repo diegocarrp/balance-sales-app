@@ -4,6 +4,8 @@ import cl.diego.balance.sales.app.item.dto.ItemDto;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -21,7 +23,8 @@ import java.math.BigDecimal;
 public class Item {
 
     @Id
-    private String       id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long       id;
     private String       description;
     private String       sku;
     private BigDecimal   price;
@@ -56,8 +59,8 @@ public class Item {
                 .description( this.description )
                 .sku( this.sku )
                 .price( this.price )
-                .category( this.itemCategory.getId( ) )
-                .itemType( this.itemType.getId( ) )
+                .category( this.itemCategory.getId() )
+                .itemType( this.itemType.getId() )
                 .build( );
     }
 

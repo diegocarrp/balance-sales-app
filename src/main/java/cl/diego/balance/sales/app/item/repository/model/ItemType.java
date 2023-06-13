@@ -16,7 +16,8 @@ import javax.persistence.*;
 public class ItemType {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String description;
 
     public ItemType( ItemTypeDto itemTypeDto ) {

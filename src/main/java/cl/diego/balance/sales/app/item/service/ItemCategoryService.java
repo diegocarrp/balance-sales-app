@@ -13,9 +13,9 @@ public interface ItemCategoryService {
 
     CategoryDto getCategoryByDescription( String description ) throws ItemCategoryNotFoundException;
 
-    CategoryDto getCategoryById( String id ) throws ItemCategoryNotFoundException;
+    CategoryDto getCategoryById( Long id ) throws ItemCategoryNotFoundException;
 
-    ItemCategory findById( String id ) throws ItemCategoryNotFoundException;
+    ItemCategory findById( Long id ) throws ItemCategoryNotFoundException;
 
     List<ItemCategory> findAll( );
 }

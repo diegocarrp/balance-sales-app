@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ItemTypeRepository extends JpaRepository<ItemType, String> {
+public interface ItemTypeRepository extends JpaRepository<ItemType, Long> {
 
     Optional<ItemType> findByDescription( String description );
 }

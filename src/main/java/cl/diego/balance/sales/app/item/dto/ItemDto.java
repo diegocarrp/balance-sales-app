@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @JsonInclude( JsonInclude.Include.NON_NULL )
 public class ItemDto {
 
-    private String     id;
+    private Long     id;
     @NotNull
     private String     description;
     @NotEmpty
@@ -25,9 +25,9 @@ public class ItemDto {
     @NotNull
     private BigDecimal price;
     @NotNull
-    private String     category;
+    private Long     category;
     @NotNull
-    private String     itemType;
+    private Long     itemType;
 
     public void updateItem( ItemDto item ) {
         this.description = item.getDescription( );

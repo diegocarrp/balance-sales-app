@@ -24,6 +24,9 @@ balance-sales:
     customer:
       read-timeout: 30
       connection-timeout: 30
+
+server:
+  port: ${SERVER_PORT:8081}
 ---
 spring:
   config:

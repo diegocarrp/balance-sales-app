@@ -25,7 +25,9 @@ public class Sale {
     private Long              clientId;
     private Long              cashierId;
     private LocalDateTime     transactionDatetime;
-    private List<SaleItemDto> items;
-    private List<PaymentDto>  payments;
+    @OneToMany
+    private List<SaleItem> items;
+    @OneToMany
+    private List<Payment>  payments;
 
 }

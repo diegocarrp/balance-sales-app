@@ -1,4 +1,10 @@
 package cl.diego.balance.sales.app.item.repository;
 
-public interface ItemCategoryRepository {
+import cl.diego.balance.sales.app.item.repository.model.ItemCategory;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface ItemCategoryRepository extends JpaRepository<ItemCategory, Long> {
+    Optional<ItemCategory> findByDescription( String description );
 }

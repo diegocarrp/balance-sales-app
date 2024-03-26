@@ -1,12 +1,52 @@
 spring:
-  datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USER}
-    password: ${DATASOURCE_PASSWORD}
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         temp:
           use_jdbc_metadata_defaults: false
+        format_sql: true
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+  profiles:
+    active: ${ACTIVE_PROFILE}
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USER}
+    password: ${DATASOURCE_PASSWORD}
+  cloud:
+    loadbalancer:
+      ribbon:
+        enable: false
+
+
+balance-sales:
+  config:
+    customer:
+      read-timeout: 30
+      connection-timeout: 30
+
+server:
+  port: ${SERVER_PORT:8081}
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+balance-sales:
+  config:
+    customer:
+      endpoint: ${CUSTOMER_ENDPOINT}
+    service: ONE
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+balance-sales:
+  config:
+    customer:
+      endpoint: http://localhost:8080/test-endpoint
+    service: TWO

@@ -1,8 +1,9 @@
-package cl.diego.balance.sales.app.sale.service;
+package cl.diego.balance.sales.app.sale.service.impl;
 
 import cl.diego.balance.sales.app.sale.exception.PaymentMethodNotFoundException;
 import cl.diego.balance.sales.app.sale.repository.PaymentMethodRepository;
 import cl.diego.balance.sales.app.sale.repository.model.PaymentMethod;
+import cl.diego.balance.sales.app.sale.service.PaymentMethodService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

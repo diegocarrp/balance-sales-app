@@ -1,10 +1,11 @@
-package cl.diego.balance.sales.app.item.service;
+package cl.diego.balance.sales.app.item.service.impl;
 
 import cl.diego.balance.commons.rest.exception.ApiValidationException;
 import cl.diego.balance.sales.app.item.dto.CategoryDto;
 import cl.diego.balance.sales.app.item.exception.ItemCategoryNotFoundException;
 import cl.diego.balance.sales.app.item.repository.ItemCategoryRepository;
 import cl.diego.balance.sales.app.item.repository.model.ItemCategory;
+import cl.diego.balance.sales.app.item.service.ItemCategoryService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -26,11 +27,11 @@ public class ItemCategoryServiceImpl implements ItemCategoryService {
 
     public ItemCategoryServiceImpl( ItemCategoryRepository itemCategoryRepository ) {
         this.itemCategoryRepository = itemCategoryRepository;
-        this.validator              = Validation.byDefaultProvider()
-                .configure()
-                .messageInterpolator( new ParameterMessageInterpolator() )
-                .buildValidatorFactory()
-                .getValidator();
+        this.validator              = Validation.byDefaultProvider( )
+                .configure( )
+                .messageInterpolator( new ParameterMessageInterpolator( ) )
+                .buildValidatorFactory( )
+                .getValidator( );
     }
 
     @Override
@@ -43,14 +44,14 @@ public class ItemCategoryServiceImpl implements ItemCategoryService {
     public CategoryDto getCategoryByDescription( String description ) {
         ItemCategory categoryDb = itemCategoryRepository.findByDescription( description.toUpperCase( Locale.ROOT ) )
                 .orElseThrow( ItemCategoryNotFoundException::new );
-        return categoryDb.toItemCategory();
+        return categoryDb.toItemCategory( );
     }
 
     @Override
     public CategoryDto getCategoryById( Long id ) {
         ItemCategory categoryDb = itemCategoryRepository.findById( id )
                 .orElseThrow( ItemCategoryNotFoundException::new );
-        return categoryDb.toItemCategory();
+        return categoryDb.toItemCategory( );
     }
 
     @Override
@@ -60,19 +61,19 @@ public class ItemCategoryServiceImpl implements ItemCategoryService {
     }
 
     @Override
-    public List<ItemCategory> findAll() {
-        return itemCategoryRepository.findAll();
+    public List<ItemCategory> findAll( ) {
+        return itemCategoryRepository.findAll( );
     }
 
     private void validateCategory( CategoryDto category ) {
         Set<ConstraintViolation<CategoryDto>> violations = validator.validate( category );
-        List<String> descriptions = violations.stream()
-                .map( v -> v.getPropertyPath() + " - " + v.getMessage() )
-                .collect( Collectors.toList() );
+        List<String> descriptions = violations.stream( )
+                .map( v -> v.getPropertyPath( ) + " - " + v.getMessage( ) )
+                .collect( Collectors.toList( ) );
 
-        if (!descriptions.isEmpty()) {
+        if( !descriptions.isEmpty( ) ) {
             throw new ApiValidationException( "Item Category wasn't created because of: ", descriptions );
         }
-        category.setDescription( category.getDescription().toUpperCase() );
+        category.setDescription( category.getDescription( ).toUpperCase( ) );
     }
 }

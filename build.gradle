@@ -35,7 +35,6 @@ dependencies {
     implementation 'io.github.openfeign:feign-jackson:12.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    implementation 'org.springframework.cloud:spring-cloud-dependencies:2022.0.2'
     testImplementation 'junit:junit'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

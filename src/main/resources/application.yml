@@ -6,17 +6,15 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
         format_sql: true
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    database:
+  datasource:
+    url: ${DS_HOST}/${DS_DB_NAME}
+    username: ${DS_USER}
+    password: ${DS_PASSWORD}
+    driver-class-name: org.postgresql.Driver
   profiles:
     active: ${ACTIVE_PROFILE}
-  datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USER}
-    password: ${DATASOURCE_PASSWORD}
-  cloud:
-    loadbalancer:
-      ribbon:
-        enable: false
+
 
 
 balance-sales:
@@ -26,7 +24,7 @@ balance-sales:
       connection-timeout: 30
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:8080}
 ---
 spring:
   config:

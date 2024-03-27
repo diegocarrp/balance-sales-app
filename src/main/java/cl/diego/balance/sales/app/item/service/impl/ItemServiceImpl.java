@@ -1,4 +1,4 @@
-package cl.diego.balance.sales.app.item.service;
+package cl.diego.balance.sales.app.item.service.impl;
 
 import cl.diego.balance.commons.rest.domain.BadInputException;
 import cl.diego.balance.commons.rest.exception.ApiValidationException;
@@ -8,6 +8,9 @@ import cl.diego.balance.sales.app.item.repository.ItemRepository;
 import cl.diego.balance.sales.app.item.repository.model.Item;
 import cl.diego.balance.sales.app.item.repository.model.ItemCategory;
 import cl.diego.balance.sales.app.item.repository.model.ItemType;
+import cl.diego.balance.sales.app.item.service.ItemCategoryService;
+import cl.diego.balance.sales.app.item.service.ItemService;
+import cl.diego.balance.sales.app.item.service.ItemTypeService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

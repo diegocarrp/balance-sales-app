@@ -1,10 +1,11 @@
-package cl.diego.balance.sales.app.item.service;
+package cl.diego.balance.sales.app.item.service.impl;
 
 import cl.diego.balance.commons.rest.exception.ApiValidationException;
 import cl.diego.balance.sales.app.item.dto.ItemTypeDto;
 import cl.diego.balance.sales.app.item.exception.ItemTypeNotFoundException;
 import cl.diego.balance.sales.app.item.repository.ItemTypeRepository;
 import cl.diego.balance.sales.app.item.repository.model.ItemType;
+import cl.diego.balance.sales.app.item.service.ItemTypeService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

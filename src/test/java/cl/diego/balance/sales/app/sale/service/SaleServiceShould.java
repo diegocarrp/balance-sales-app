@@ -17,6 +17,7 @@ import cl.diego.balance.sales.app.sale.exception.IncompletePaymentException;
 import cl.diego.balance.sales.app.sale.repository.SaleRepository;
 import cl.diego.balance.sales.app.sale.repository.model.PaymentMethod;
 import cl.diego.balance.sales.app.sale.repository.model.Sale;
+import cl.diego.balance.sales.app.sale.service.impl.SaleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -191,10 +192,10 @@ class SaleServiceShould {
         LocalDateTime endDate = LocalDateTime.of( 2023, 5, 9, 0, 17 );
 
         List<ItemCategory> categories = new ArrayList<>( );
-        categories.add( new ItemCategory( "1", "Electronics" ) );
-        categories.add( new ItemCategory( "2", "Furniture" ) );
-        categories.add( new ItemCategory( "3", "Pets" ) );
-        categories.add( new ItemCategory( "4", "Consoles" ) );
+        categories.add( new ItemCategory( 1L, "Electronics" ) );
+        categories.add( new ItemCategory( 2L, "Furniture" ) );
+        categories.add( new ItemCategory( 3L, "Pets" ) );
+        categories.add( new ItemCategory( 4L, "Consoles" ) );
 
         when( itemCategoryService.findAll( ) ).thenReturn( categories );
         when( saleItemService.totalSaleByCategory( any( ),

@@ -2,9 +2,10 @@ package cl.diego.balance.sales.app.sale.controller;
 
 import cl.diego.balance.sales.app.sale.dto.SaleDetailDto;
 import cl.diego.balance.sales.app.sale.dto.SaleDto;
+import cl.diego.balance.sales.app.sale.dto.SalesSummaryRequest;
+import cl.diego.balance.sales.app.sale.dto.SalesSummaryResponse;
+import cl.diego.balance.sales.app.sale.service.SalesService;
 import cl.diego.balance.sales.app.sale.dto.SaleResponseDto;
-import cl.diego.balance.sales.app.sale.dto.request.SaleRequest;
-import cl.diego.balance.sales.app.sale.service.SaleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,18 +15,26 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping( "/sale" )
+@RequestMapping( "/sales" )
 @AllArgsConstructor
 @Slf4j
-public class SaleController {
+public class SalesController {
 
-    private final SaleService saleService;
+    private final SalesService salesService;
 
     @PostMapping( "/register" )
     public ResponseEntity<SaleDto> registerSale( @RequestBody SaleRequest saleRequest ) {
         log.info( "Registering sale with body: <{}>", saleRequest );
 
-        SaleDto response = saleService.registerSale( saleRequest );
+        SaleDto response = salesService.registerSale( saleRequest );
+        return ResponseEntity.ok( ).build( );
+    }
+
+    @PostMapping( "/summary" )
+    public ResponseEntity<SalesSummaryResponse> SalesSummary(@RequestBody SalesSummaryRequest summaryRequest ) {
+        log.info( "Getting summary with body: <{}>", summaryRequest );
+
+        SalesSummaryResponse response = salesService.generateSummary( summaryRequest );
         return ResponseEntity.ok( response );
     }
 
@@ -33,7 +42,7 @@ public class SaleController {
     public ResponseEntity<SaleResponseDto> registerSale( @PathVariable Long id ) {
         log.info( "Looking for sale with id: <{}>", id );
 
-        SaleResponseDto saleFound = saleService.getSaleById( id );
+        SaleResponseDto saleFound = salesService.getSaleById( id );
         return ResponseEntity.ok( saleFound );
     }
 
@@ -41,7 +50,7 @@ public class SaleController {
     public ResponseEntity<SaleDetailDto> getSaleDetailByCategory( @RequestParam @DateTimeFormat( pattern = "yyyy-MM-dd'T'HH:mm:ss" ) LocalDateTime startDate,
                                                                   @RequestParam( required = false ) @DateTimeFormat( pattern = "yyyy-MM-dd'T'HH:mm:ss" ) LocalDateTime endDate ) {
         log.info( "Looking for sale detail by categories" );
-        SaleDetailDto saleDetailByCategory = saleService.getSaleDetailByCategory( startDate, endDate );
+        SaleDetailDto saleDetailByCategory = salesService.getSaleDetailByCategory( startDate, endDate );
         return ResponseEntity.ok( saleDetailByCategory );
     }
 
